@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>如何将小黑屋更改为设备管理员模式</title>
+      <link href="/2024/03/14/%E5%B0%8F%E9%BB%91%E5%B1%8B%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86%E5%91%98/"/>
+      <url>/2024/03/14/%E5%B0%8F%E9%BB%91%E5%B1%8B%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86%E5%91%98/</url>
+      
+        <content type="html"><![CDATA[<p>今天给手机安装了一个权限狗APP，但是管理权限的时候老是提示“小黑屋还不是设备管理员”。问题是我的权限狗是用ADB激活的，跟权限狗没啥关系。我猜想这可能是权限不足导致的，毕竟一个用户端app无法进行一些深层次的权限管理，我手机又没root。思来想去研究了一下小黑屋的工作模式，我原本激活小黑屋用的Shizuku，所以想改为设备管理员模式看看。<br><img src="/images/%E5%B0%8F%E9%BB%91%E5%B1%8B%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F.jpg" alt="小黑屋工作模式"></p><p>在网上查了一些资料，更改为设备管理员需要退出系统设置上的所有的账号。老实说手机APP下的多了一个个退很麻烦，而且最麻烦的是后面我需要一个个登回来……流汗emoji<br><img src="/images/%E8%B4%A6%E5%8F%B7%E5%90%8C%E6%AD%A5%E7%95%8C%E9%9D%A2.jpg" alt="账号同步界面"></p><p>终于删除所有的账号了，剩下就是执行代码，然后就是大功告成。手机连接电脑并启动ADB，输入</p><pre><code class="highlight bash">adb shell dpm set-device-owner web1n.stopapp/.receiver.AdminReceiver</code></pre><p>然鹅事情并不简单，命令窗口输出一堆错误。我看到下面这句话<br>“Not allowed to set the device owner because there are already several users on the device”<br><img src="/images/ADB%E9%94%99%E8%AF%AF%E6%8F%90%E7%A4%BA.jpg" alt="ADB成功提示界面"></p><p>好家伙，事情果然不简单。然后去网上查资料，有说账号没有没有删干净的，有说最好恢复出厂设置的……</p><p>我又仔细检查了一遍，账号都已经删完了，也没有分身APP存在。只是账号那里有一个默认的支付宝APP，那个我试过无法删除，但是账号我已经登出了。其它APP的账号我都直接删了，应该不是这个原因。</p><p>然后我又去小黑屋官网看了看，根据ADB返回的错误提示是说我手机存在多个用户，然后我去找怎么查询手机的用户以及如何删除。终于找到了下面的ADB指令</p><pre><code class="highlight bash">adb shell dumpsys account</code></pre><p>我看到返回的是我有两个用户，一个是User UserInfo{0:机主:13}，另一个是User UserInfo{999:FlymeParallelSpace:30}<br>不用多说了编号999的是手机双开的用户，直接ADB删除这个999的用户</p><pre><code class="highlight bash">adb shell pm remove-user 999</code></pre><p>然后就看到成功删除的提示“Success: removed user”，下一步就是最开始的授予设备管理员代码啦<br><img src="/images/ADB%E6%88%90%E5%8A%9F%E6%8F%90%E7%A4%BA.jpg" alt="ADB成功提示界面"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术折腾 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 安卓 </tag>
+            
+            <tag> 手机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello World</title>
+      <link href="/2024/03/12/hello-world/"/>
+      <url>/2024/03/12/hello-world/</url>
+      
+        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="highlight bash">$ hexo new <span class="string">&quot;My New Post&quot;</span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="highlight bash">$ hexo server</code></pre><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="highlight bash">$ hexo generate</code></pre><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="highlight bash">$ hexo deploy</code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+  
+  
+</search>
